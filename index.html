@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rise of Kingdoms Flag Builder</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            font-weight: bold;
+        }
+        .container {
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        td input {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        td.right-align {
+            text-align: right; /* 数値を右揃え */
+        }
+        /* 一番左の列を暗い青に設定 */
+        td:first-child, th:first-child {
+            background-color: #2E3B55; /* 暗い青 */
+            color: white; /* 文字を白に */
+            font-weight: bold; /* 太字に */
+            text-align: left; /* 左揃え */
+            padding-left: 10px; /* 左に余白を追加 */
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #2E3B55; /* 暗めの青 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #25334A; /* さらに暗い青 */
+        }
+        .output {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 各リソースのヘッダー色 */
+        th.header-food {
+            background-color: #4CAF50; /* 緑 */
+            color: white;
+        }
+        th.header-wood {
+            background-color: #FF9800; /* オレンジ */
+            color: white;
+        }
+        th.header-stone {
+            background-color: #9E9E9E; /* グレー */
+            color: white;
+        }
+        th.header-gold {
+            background-color: #FFEB3B; /* 黄色 */
+            color: black;
+        }
+        th.header-crystal {
+            background-color: #2196F3; /* 青 */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>Rise of Kingdoms Flag Builder</h1>
+
+<!-- 倉庫設定 -->
+<div class="container">
+    <h2>倉庫の設定</h2>
+    <table>
+        <thead>
+        <tr>
+            <th></th>
+            <th class="header-food">食料</th>
+            <th class="header-wood">木材</th>
+            <th class="header-stone">石材</th>
+            <th class="header-gold">ゴールド</th>
+            <th class="header-crystal">水晶</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><b>毎時増加量 (k)</b></td>
+            <td><input type="number" id="hourlyFood"    placeholder="増加量" step="0.5" value="182"></td>
+            <td><input type="number" id="hourlyWood"    placeholder="増加量" step="0.5" value="202"></td>
+            <td><input type="number" id="hourlyStone"   placeholder="増加量" step="0.5" value="160.5"></td>
+            <td><input type="number" id="hourlyGold"    placeholder="増加量" step="0.5" value="132"></td>
+            <td><input type="number" id="hourlyCrystal" placeholder="増加量" step="0.5" value="33"></td>
+        </tr>
+        <tr>
+            <td><b>現在量 (m)</b></td>
+            <td><input type="number" id="currentFood"    placeholder="現在量" step="0.05" value="11"></td>
+            <td><input type="number" id="currentWood"    placeholder="現在量" step="0.05" value="11"></td>
+            <td><input type="number" id="currentStone"   placeholder="現在量" step="0.05" value="8.25"></td>
+            <td><input type="number" id="currentGold"    placeholder="現在量" step="0.05" value="5.50"></td>
+            <td><input type="number" id="currentCrystal" placeholder="現在量" step="0.05" value="5.50"></td>
+        </tr>
+        <tr>
+            <td><b>最大値 (m)</b></td>
+            <td><input type="number" id="maxFood"    placeholder="最大値"  value="11"></td>
+            <td><input type="number" id="maxWood"    placeholder="最大値"  value="11"></td>
+            <td><input type="number" id="maxStone"   placeholder="最大値"  value="8.25"></td>
+            <td><input type="number" id="maxGold"    placeholder="最大値"  value="5.5"></td>
+            <td><input type="number" id="maxCrystal" placeholder="最大値"  value="5.5"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- その他の設定 -->
+<div class="container">
+    <h2>旗建設の設定</h2>
+    <div class="input-group">
+        <label><b>現在の旗数</b></label>
+        <input type="number" id="currentFlags" placeholder="現在の旗数" value="169">
+    </div>
+    <div class="input-group">
+        <label><b>建てたい旗数</b></label>
+        <input type="number" id="targetFlags" placeholder="建てたい旗数" value="500">
+    </div>
+    <br>
+    <div class="input-group">
+        <label><input type="checkbox" id="timeEnabled" checked>時間の概念</label>
+    </div>
+    <div class="input-group">
+        <label><input type="checkbox" id="skillEnabled" checked>同盟スキル:技巧</label>
+    </div>
+    <div>
+        <label>　<b>建設時間:</b>
+            <br>　　通常旗 (15分/本)
+            <br>　　技巧旗 (最初の12本のみ 5分/本)</label>
+    </div>
+    <br>
+    <button onclick="calculate_flags()">計算する</button>
+</div>
+
+<!-- 計算結果 -->
+<div class="output">
+    <h2>計算結果</h2>
+    <div id="output"></div>
+    <div class="output" id="output2"></div>
+</div>
+</body>
+</html>
+<script>
+const flag_cost_lists = {
+     1: { food:  75000, wood:  75000, stone:  56250, gold:  37500, crystal:      0 },
+    11: { food:  75000, wood:  75000, stone:  56250, gold:  37500, crystal:      0 },
+    21: { food:  93750, wood:  93750, stone:  70350, gold:  46875, crystal:   7500 },
+    31: { food:  93750, wood:  93750, stone:  70350, gold:  46875, crystal:  11250 },
+    41: { food: 112500, wood: 112500, stone:  84375, gold:  56250, crystal:  15000 },
+    51: { food: 112500, wood: 112500, stone:  84375, gold:  56250, crystal:  18750 },
+    61: { food: 131250, wood: 131250, stone:  98475, gold:  65625, crystal:  22500 },
+    71: { food: 131250, wood: 131250, stone:  98475, gold:  65625, crystal:  26250 },
+    81: { food: 150000, wood: 150000, stone: 112500, gold:  75000, crystal:  30000 },
+    91: { food: 150000, wood: 150000, stone: 112500, gold:  75000, crystal:  33750 },
+   101: { food: 168750, wood: 168750, stone: 126600, gold:  84375, crystal:  37500 },
+   111: { food: 168750, wood: 168750, stone: 126600, gold:  84375, crystal:  41250 },
+   121: { food: 187500, wood: 187500, stone: 140625, gold:  93750, crystal:  45000 },
+   131: { food: 187500, wood: 187500, stone: 140625, gold:  93750, crystal:  48750 },
+   141: { food: 206250, wood: 206250, stone: 154725, gold: 103125, crystal:  52500 },
+   151: { food: 206250, wood: 206250, stone: 154725, gold: 103125, crystal:  56250 },
+   161: { food: 225000, wood: 225000, stone: 168750, gold: 112500, crystal:  60000 },
+   171: { food: 225000, wood: 225000, stone: 168750, gold: 112500, crystal:  63750 },
+   181: { food: 243750, wood: 243750, stone: 182850, gold: 121875, crystal:  67500 },
+   191: { food: 243750, wood: 243750, stone: 182850, gold: 121875, crystal:  71250 },
+   201: { food: 262500, wood: 262500, stone: 196875, gold: 131250, crystal:  75000 },
+   211: { food: 262500, wood: 262500, stone: 196875, gold: 131250, crystal:  78750 },
+   221: { food: 281250, wood: 281250, stone: 210975, gold: 140625, crystal:  82500 },
+   231: { food: 281250, wood: 281250, stone: 210975, gold: 140625, crystal:  86500 },
+   241: { food: 300000, wood: 300000, stone: 225000, gold: 150000, crystal:  90000 },
+   251: { food: 300000, wood: 300000, stone: 225000, gold: 150000, crystal:  93750 },
+   261: { food: 318750, wood: 318750, stone: 239100, gold: 159375, crystal:  97500 },
+   271: { food: 318750, wood: 318750, stone: 239100, gold: 159375, crystal: 101250 },
+   281: { food: 337500, wood: 337500, stone: 253125, gold: 168750, crystal: 105000 },
+   291: { food: 337500, wood: 337500, stone: 253125, gold: 168750, crystal: 112500 },
+   301: { food: 356250, wood: 356250, stone: 267225, gold: 178125, crystal: 187500 },
+   311: { food: 356250, wood: 356250, stone: 267225, gold: 178125, crystal: 187500 },
+   321: { food: 375000, wood: 375000, stone: 281250, gold: 187500, crystal: 187500 },
+   331: { food: 375000, wood: 375000, stone: 281250, gold: 187500, crystal: 187500 },
+   341: { food: 393750, wood: 393750, stone: 295350, gold: 196875, crystal: 187500 },
+   351: { food: 393750, wood: 393750, stone: 295350, gold: 196875, crystal: 187500 },
+   361: { food: 412500, wood: 412500, stone: 309375, gold: 206250, crystal: 187500 },
+   371: { food: 412500, wood: 412500, stone: 309375, gold: 206250, crystal: 187500 },
+   381: { food: 431250, wood: 431250, stone: 323475, gold: 215625, crystal: 187500 },
+   391: { food: 431250, wood: 431250, stone: 323475, gold: 215625, crystal: 187500 },
+   401: { food: 450000, wood: 450000, stone: 337500, gold: 225000, crystal: 225000 },
+   411: { food: 450000, wood: 450000, stone: 337500, gold: 225000, crystal: 225000 },
+   421: { food: 468750, wood: 468750, stone: 351600, gold: 234375, crystal: 225000 }
+};
+
+function mb_convert_k(number) {
+    return number * 1000;
+}
+
+function mb_convert_m(number) {
+    return number * 1000000;
+}
+
+function calculate_flags() {
+    // 毎時増加量
+    const hourly_food    = mb_convert_k(parseFloat(document.getElementById("hourlyFood").value) || 0);
+    const hourly_wood    = mb_convert_k(parseFloat(document.getElementById("hourlyWood").value) || 0);
+    const hourly_stone   = mb_convert_k(parseFloat(document.getElementById("hourlyStone").value) || 0);
+    const hourly_gold    = mb_convert_k(parseFloat(document.getElementById("hourlyGold").value) || 0);
+    const hourly_crystal = mb_convert_k(parseFloat(document.getElementById("hourlyCrystal").value) || 0);
+
+    // 現在量
+    let current_food    = mb_convert_m(parseFloat(document.getElementById("currentFood").value) || 0);
+    let current_wood    = mb_convert_m(parseFloat(document.getElementById("currentWood").value) || 0);
+    let current_stone   = mb_convert_m(parseFloat(document.getElementById("currentStone").value) || 0);
+    let current_gold    = mb_convert_m(parseFloat(document.getElementById("currentGold").value) || 0);
+    let current_crystal = mb_convert_m(parseFloat(document.getElementById("currentCrystal").value) || 0);
+
+    // 最大量
+    const max_food    = mb_convert_m(parseFloat(document.getElementById("maxFood").value) || 0);
+    const max_wood    = mb_convert_m(parseFloat(document.getElementById("maxWood").value) || 0);
+    const max_stone   = mb_convert_m(parseFloat(document.getElementById("maxStone").value) || 0);
+    const max_gold    = mb_convert_m(parseFloat(document.getElementById("maxGold").value) || 0);
+    const max_crystal = mb_convert_m(parseFloat(document.getElementById("maxCrystal").value) || 0);
+
+    const current_flags = parseInt(document.getElementById("currentFlags").value) || 0;
+    const target_flags = parseInt(document.getElementById("targetFlags").value) || 500;
+
+    const time_enabled = document.getElementById('timeEnabled').checked;
+    const skill_enabled = document.getElementById('skillEnabled').checked;
+
+    // 結果表示の準備
+    const output_div = document.getElementById("output");
+    const output2_div = document.getElementById("output2");
+    output_div.innerHTML = "";
+    output2_div.innerHTML = "";
+
+    let food = current_food;
+    let wood = current_wood;
+    let stone = current_stone;
+    let gold = current_gold;
+    let crystal = current_crystal;
+
+    let start_flags = current_flags;
+    let total_flags = 0;
+    let total_add_flags = 0;
+
+    let skill_number = 12;
+    let elapsed_time_min = 0;
+    let all_check = true;
+    let progress_date = start_date = '12/15 00:30';
+
+    if (time_enabled) {
+        output2_div.innerHTML += `<h3>[${start_date}] 開始</h3>`;
+    }
+    // 旗の建設処理
+    for (let i = 0; i < target_flags; i++) {
+        const flag_number = current_flags + i + 1;
+
+        let flag_cost = get_flag_cost(flag_number)
+
+        let food_cost    = flag_cost['food'];
+        let wood_cost    = flag_cost['wood'];
+        let stone_cost   = flag_cost['stone'];
+        let gold_cost    = flag_cost['gold'];
+        let crystal_cost = flag_cost['crystal'];
+
+        // 資源が足りるか確認
+        let food_check = food >= food_cost;
+        let wood_check = wood >= wood_cost;
+        let stone_check = stone >= stone_cost;
+        let gold_check = gold >= gold_cost;
+        let crystal_check = crystal >= crystal_cost;
+        all_check = (food_check && wood_check && stone_check && gold_check && crystal_check);
+
+        if (all_check) {
+            // 資源を差し引き
+            food -= food_cost;
+            wood -= wood_cost;
+            stone -= stone_cost;
+            gold -= gold_cost;
+            crystal -= crystal_cost;
+        }
+
+        // 残量割合（%）を計算
+        let food_percentage = ((food / max_food) * 100).toFixed(1);
+        let wood_percentage = ((wood / max_wood) * 100).toFixed(1);
+        let stone_percentage = ((stone / max_stone) * 100).toFixed(1);
+        let gold_percentage = ((gold / max_gold) * 100).toFixed(1);
+        let crystal_percentage = ((crystal / max_crystal) * 100).toFixed(1);
+
+
+        // 時間の概念が有効なら倉庫の現在量を増加量分反映
+        let elapsed_time_flag = 15;
+        let new_date = '';
+        if (time_enabled) {
+            // 日付文字列を分解してDateオブジェクトを作成
+            let [month_day, time] = progress_date.split(' ');
+            let [month, day] = month_day.split('/').map(Number);
+            let [hour, minute] = time.split(':').map(Number);
+
+            // Dateオブジェクトを生成
+            let date = new Date();
+            date.setMonth(month - 1); // JavaScriptでは月は0始まり
+            date.setDate(day);
+            date.setHours(hour);
+            date.setMinutes(minute);
+
+            if (skill_enabled && skill_number > 0) {
+                elapsed_time_flag = 5;
+                skill_number -= 1;
+            }
+
+            elapsed_time_min += elapsed_time_flag;
+            date.setMinutes(date.getMinutes() + elapsed_time_flag);
+
+            // 新しい日時を同じ形式でフォーマット
+            let new_month = (date.getMonth() + 1).toString().padStart(2, '0'); // 月を2桁に
+            let new_day = date.getDate().toString().padStart(2, '0'); // 日を2桁に
+            let new_hour = date.getHours().toString().padStart(2, '0'); // 時間を2桁に
+            let new_minute = date.getMinutes().toString().padStart(2, '0'); // 分を2桁に
+
+            progress_date = `${new_month}/${new_day} ${new_hour}:${new_minute}`;
+        }
+
+        // 結果を表示
+        if (all_check === true) {
+            if (time_enabled) {
+                output2_div.innerHTML += `<h3>[${progress_date}]</h3>`;
+            }
+            output2_div.innerHTML += `<h3>${i + 1}: 旗 ${flag_number} 本目の旗を建設しました。</h3>`;
+        } else {
+            output2_div.innerHTML += `<h3 style="color: red;">${i + 1}: 旗 ${flag_number} 本目の旗を建設できませんでした。</p></h3>`;
+        }
+
+        // 残量をテーブル形式で表示
+        let result_html = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>資源</th>
+                        <th class="header-food">食料 (${food_percentage}%)</th>
+                        <th class="header-wood">木材 (${wood_percentage}%)</th>
+                        <th class="header-stone">石材 (${stone_percentage}%)</th>
+                        <th class="header-gold">ゴールド (${gold_percentage}%)</th>
+                        <th class="header-crystal">水晶 (${crystal_percentage}%)</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+        result_html += `
+                    <tr>
+                        <td>消費量</td>
+                        <td class="right-align">${style_resource(food_cost, food_check).toLocaleString()}</td>
+                        <td class="right-align">${style_resource(wood_cost, wood_check).toLocaleString()}</td>
+                        <td class="right-align">${style_resource(stone_cost, stone_check).toLocaleString()}</td>
+                        <td class="right-align">${style_resource(gold_cost, gold_check).toLocaleString()}</td>
+                        <td class="right-align">${style_resource(crystal_cost, crystal_check).toLocaleString()}</td>
+                    </tr>`;
+
+        result_html += `
+                    <tr>
+                        <td>残量</td>
+                        <td class="right-align">${(food).toLocaleString()}</td>
+                        <td class="right-align">${(wood).toLocaleString()}</td>
+                        <td class="right-align">${(stone).toLocaleString()}</td>
+                        <td class="right-align">${(gold).toLocaleString()}</td>
+                        <td class="right-align">${(crystal).toLocaleString()}</td>
+                    </tr>`;
+
+        result_html += `
+                </tbody>
+            </table>`;
+
+        output2_div.innerHTML += result_html;
+
+        if (!all_check) {
+            break;
+        } else {
+            total_flags = flag_number;
+            total_add_flags = i + 1;
+
+            if (time_enabled && elapsed_time_min % 15 === 0) {
+                food = Math.min(food + hourly_food * 0.25, max_food);
+                wood = Math.min(wood + hourly_wood * 0.25, max_wood);
+                stone = Math.min(stone + hourly_stone * 0.25, max_stone);
+                gold = Math.min(gold + hourly_gold * 0.25, max_gold);
+                crystal = Math.min(crystal + hourly_crystal * 0.25, max_crystal);
+
+                food_percentage = ((food / max_food) * 100).toFixed(1);
+                wood_percentage = ((wood / max_wood) * 100).toFixed(1);
+                stone_percentage = ((stone / max_stone) * 100).toFixed(1);
+                gold_percentage = ((gold / max_gold) * 100).toFixed(1);
+                crystal_percentage = ((crystal / max_crystal) * 100).toFixed(1);
+
+                // 結果を表示
+                if (all_check === true) {
+
+                    output2_div.innerHTML += `<h3 style="color: #2196F3;">15分経過し毎時増加量の25%を回復しました。</h3>`;
+                }
+
+                // 残量をテーブル形式で表示
+                let result_html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>資源</th>
+                                <th class="header-food">食料 (${food_percentage}%)</th>
+                                <th class="header-wood">木材 (${wood_percentage}%)</th>
+                                <th class="header-stone">石材 (${stone_percentage}%)</th>
+                                <th class="header-gold">ゴールド (${gold_percentage}%)</th>
+                                <th class="header-crystal">水晶 (${crystal_percentage}%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                            result_html += `
+                            <tr>
+                                <td>増加量</td>
+                                <td class="right-align">${(hourly_food * 0.25).toLocaleString()}</td>
+                                <td class="right-align">${(hourly_wood * 0.25).toLocaleString()}</td>
+                                <td class="right-align">${(hourly_stone * 0.25).toLocaleString()}</td>
+                                <td class="right-align">${(hourly_gold * 0.25).toLocaleString()}</td>
+                                <td class="right-align">${(hourly_crystal * 0.25).toLocaleString()}</td>
+                            </tr>`;
+
+                            result_html += `
+                            <tr>
+                                <td>残量</td>
+                                <td class="right-align">${(food).toLocaleString()}</td>
+                                <td class="right-align">${(wood).toLocaleString()}</td>
+                                <td class="right-align">${(stone).toLocaleString()}</td>
+                                <td class="right-align">${(gold).toLocaleString()}</td>
+                                <td class="right-align">${(crystal).toLocaleString()}</td>
+                            </tr>`;
+
+                            result_html += `
+                        </tbody>
+                    </table>`;
+
+                output2_div.innerHTML += result_html;
+            }
+        }
+    }
+
+    let main_result_html = `<h3 style="color: green;">${start_flags}本目から${total_flags}本目まで、${total_add_flags}本の旗を建設可能。</h3>`;
+
+    output_div.innerHTML += main_result_html;
+}
+
+/**
+ * 旗のコストを取得す関数
+ * @param {number} flag_number - 現在建てる旗の本数
+ * @returns {object} - 該当する旗のコスト
+ */
+function get_flag_cost(flag_number) {
+    // 該当するキーを見つける
+    const keys = Object.keys(flag_cost_lists).map(Number).sort((a, b) => a - b);
+    let applicable_key = 1;
+    for (const key of keys) {
+        if (flag_number >= key) {
+            applicable_key = key;
+        } else {
+            break;
+        }
+    }
+    return flag_cost_lists[applicable_key];
+}
+
+// スタイルを動的に適用する関数
+function style_resource(value, check) {
+    return check ? value : `<span style="color: red; font-weight: bold;">${value}</span>`;
+}
+</script>
